@@ -20,9 +20,10 @@ body {
   width: 100%;
   overflow-x: hidden;
   background: linear-gradient(180deg,
-    #003d5c 0%,
-    #002a45 33%,
-    #001f35 66%,
+    #002a45 0%,
+    #00233a 25%,
+    #001d30 50%,
+    #001825 75%,
     #001428 100%
   );
 }
@@ -36,15 +37,19 @@ body {
   position: relative;
   background:
     linear-gradient(180deg,
-      rgba(0, 61, 92, 0.5) 0%,
-      rgba(0, 61, 92, 0.6) 50%,
-      rgba(0, 42, 69, 0.8) 100%
+      rgba(0, 61, 92, 0.4) 0%,
+      rgba(0, 50, 75, 0.5) 40%,
+      rgba(0, 42, 69, 0.6) 70%,
+      rgba(0, 35, 58, 0.75) 85%,
+      rgba(0, 30, 50, 0.85) 92%,
+      rgba(0, 25, 42, 0.95) 96%,
+      #002a45 100%
     ),
     url('/bg.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-attachment: scroll;
   color: white;
   padding: 2rem;
   overflow: hidden;
@@ -211,61 +216,6 @@ body {
   overflow: hidden;
 }
 
-.light-rays {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 0;
-  overflow: hidden;
-}
-
-.ray {
-  position: absolute;
-  top: -50%;
-  width: 100px;
-  height: 150%;
-  background: linear-gradient(180deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(186, 230, 253, 0.08) 30%,
-    rgba(224, 242, 254, 0.06) 50%,
-    rgba(186, 230, 253, 0.04) 70%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  transform-origin: top center;
-  animation: rayShift 20s ease-in-out infinite;
-  filter: blur(20px);
-}
-
-.ray:nth-child(1) {
-  left: 20%;
-  animation-delay: 0s;
-}
-
-.ray:nth-child(2) {
-  left: 50%;
-  animation-delay: 7s;
-  width: 120px;
-}
-
-.ray:nth-child(3) {
-  left: 75%;
-  animation-delay: 14s;
-  width: 90px;
-}
-
-@keyframes rayShift {
-  0%, 100% {
-    opacity: 0.3;
-    transform: rotate(-2deg);
-  }
-  50% {
-    opacity: 0.6;
-    transform: rotate(2deg);
-  }
-}
 
 .sargassum-particles {
   position: absolute;
@@ -633,10 +583,6 @@ body {
     padding: 2rem 1.5rem;
     opacity: 1;
     filter: blur(0px);
-  }
-
-  .light-rays {
-    display: none;
   }
 
   .particle {

@@ -1,6 +1,22 @@
+import { useEffect } from 'react'
 import './App.css'
 
 function App() {
+  useEffect(() => {
+    const handleScroll = () => {
+      const heroSection = document.querySelector('.hero-section')
+      if (heroSection) {
+        const scrollPosition = window.scrollY
+        const heroHeight = heroSection.clientHeight
+        const opacity = Math.max(0, 1 - (scrollPosition / heroHeight) * 1.5)
+        heroSection.style.opacity = opacity.toString()
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   return (
     <div className="page-wrapper">
       <div className="container hero-section">
@@ -24,11 +40,6 @@ function App() {
       </div>
 
       <section className="depth-section depth-1">
-        <div className="light-rays">
-          <div className="ray"></div>
-          <div className="ray"></div>
-          <div className="ray"></div>
-        </div>
         <div className="sargassum-particles">
           <div className="particle"></div>
           <div className="particle"></div>
