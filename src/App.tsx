@@ -148,8 +148,9 @@ function App() {
         <div className="depth-content">
           <h2>Dive Deeper</h2>
           <p className="depth-description">
-            We explore uncharted territories in artificial intelligence,
-            uncovering insights that drive meaningful transformation.
+            The most transformative opportunities rarely announce themselves.
+            They drift at the edges of what's known, waiting to be recognized.
+            We specialize in finding what others haven't thought to look for.
           </p>
         </div>
       </section>
