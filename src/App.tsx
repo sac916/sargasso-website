@@ -24,20 +24,47 @@ function App() {
       </div>
 
       <section className="depth-section depth-1">
+        <div className="light-rays">
+          <div className="ray"></div>
+          <div className="ray"></div>
+          <div className="ray"></div>
+        </div>
+        <div className="sargassum-particles">
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+          <div className="particle"></div>
+        </div>
         <div className="depth-content">
           <h2>Our Expertise</h2>
           <div className="expertise-grid">
-            <div className="expertise-item">
+            <div className="expertise-item depth-near">
               <h3>Strategy</h3>
               <p>AI transformation roadmaps and implementation</p>
             </div>
-            <div className="expertise-item">
+            <div className="expertise-item depth-mid">
               <h3>Engineering</h3>
               <p>Custom AI solutions and system architecture</p>
             </div>
-            <div className="expertise-item">
+            <div className="expertise-item depth-far">
               <h3>Integration</h3>
               <p>Seamless deployment into existing workflows</p>
+            </div>
+            <div className="expertise-item depth-mid">
+              <h3>Research</h3>
+              <p>Cutting-edge AI research and development</p>
+            </div>
+            <div className="expertise-item depth-near">
+              <h3>Training</h3>
+              <p>Team enablement and knowledge transfer</p>
             </div>
           </div>
         </div>
