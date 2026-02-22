@@ -77,12 +77,9 @@ function App() {
             Navigating the depths of artificial intelligence to deliver strategic solutions
           </p>
           <div className="contact">
-            <a href="mailto:contact@sargasso.ai" className="contact-btn">Get in Touch</a>
+            <a href="mailto:contact@sargasso.ai" className="contact-btn">Let's Talk Strategy</a>
           </div>
         </main>
-        <div className="scroll-indicator">
-          <div className="scroll-arrow"></div>
-        </div>
       </div>
 
       <section className="depth-section depth-1">
