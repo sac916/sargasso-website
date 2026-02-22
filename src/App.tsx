@@ -1,69 +1,53 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import './App.css'
 
 function App() {
-  const heroRef = useRef<HTMLDivElement>(null)
-
   useEffect(() => {
     document.body.classList.add('loaded')
   }, [])
 
-  useEffect(() => {
-    const observerOptions = {
-      root: null,
-      rootMargin: '0px',
-      threshold: Array.from({ length: 101 }, (_, i) => i / 100)
+  const { scrollYProgress } = useScroll()
+  
+  // Hero parallax animations
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0])
+  const heroY = useTransform(scrollYProgress, [0, 0.3], [0, -100])
+
+  // Expertise grid stagger animation variants
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.1
+      }
     }
+  }
 
-    const handleIntersection = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach(entry => {
-        if (entry.target.classList.contains('hero-section')) {
-          const scrollRatio = 1 - entry.intersectionRatio
-          const heroElement = entry.target as HTMLElement
-          const mediaElement = heroElement.querySelector('.hero-media') as HTMLElement
-          const contentElement = heroElement.querySelector('.content') as HTMLElement
-
-          heroElement.style.setProperty('--scroll-progress', scrollRatio.toString())
-
-          if (mediaElement) {
-            const mediaOpacity = Math.max(0, 1 - scrollRatio * 1.5)
-            mediaElement.style.opacity = mediaOpacity.toString()
-          }
-
-          if (contentElement) {
-            const contentOpacity = Math.max(0, 1 - scrollRatio * 1.8)
-            const translateY = scrollRatio * 100
-            contentElement.style.opacity = contentOpacity.toString()
-            contentElement.style.transform = `translateY(-${translateY}px)`
-          }
-        } else {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible')
-          }
-        }
-      })
+  const itemVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: 30, 
+      scale: 0.9 
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      scale: 1,
+      transition: { 
+        type: "spring" as const, 
+        stiffness: 100, 
+        damping: 20 
+      }
     }
-
-    const observer = new IntersectionObserver(handleIntersection, observerOptions)
-
-    if (heroRef.current) {
-      observer.observe(heroRef.current)
-    }
-
-    const depthSections = document.querySelectorAll('.depth-section')
-    depthSections.forEach(section => observer.observe(section))
-
-    const expertiseItems = document.querySelectorAll('.expertise-item')
-    expertiseItems.forEach(item => observer.observe(item))
-
-    return () => {
-      observer.disconnect()
-    }
-  }, [])
+  }
 
   return (
     <div className="page-wrapper">
-      <div ref={heroRef} className="container hero-section">
+      <motion.div 
+        className="container hero-section"
+        style={{ opacity: heroOpacity, y: heroY }}
+      >
         <div className="hero-media">
           <div className="ocean-overlay"></div>
         </div>
@@ -80,9 +64,15 @@ function App() {
             <a href="mailto:contact@sargasso.ai" className="contact-btn">Let's Talk Strategy</a>
           </div>
         </main>
-      </div>
+      </motion.div>
 
-      <section className="depth-section depth-1">
+      <motion.section 
+        className="depth-section depth-1"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
         <div className="sargassum-particles">
           <div className="particle"></div>
           <div className="particle"></div>
@@ -99,32 +89,44 @@ function App() {
         </div>
         <div className="depth-content">
           <h2>Our Expertise</h2>
-          <div className="expertise-grid">
-            <div className="expertise-item depth-near">
+          <motion.div 
+            className="expertise-grid"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+          >
+            <motion.div className="expertise-item depth-near" variants={itemVariants}>
               <h3>Strategy</h3>
               <p>AI transformation roadmaps and implementation</p>
-            </div>
-            <div className="expertise-item depth-mid">
+            </motion.div>
+            <motion.div className="expertise-item depth-mid" variants={itemVariants}>
               <h3>Engineering</h3>
               <p>Custom AI solutions and system architecture</p>
-            </div>
-            <div className="expertise-item depth-far">
+            </motion.div>
+            <motion.div className="expertise-item depth-far" variants={itemVariants}>
               <h3>Integration</h3>
               <p>Seamless deployment into existing workflows</p>
-            </div>
-            <div className="expertise-item depth-mid">
+            </motion.div>
+            <motion.div className="expertise-item depth-mid" variants={itemVariants}>
               <h3>Research</h3>
               <p>Cutting-edge AI research and development</p>
-            </div>
-            <div className="expertise-item depth-near">
+            </motion.div>
+            <motion.div className="expertise-item depth-near" variants={itemVariants}>
               <h3>Training</h3>
               <p>Team enablement and knowledge transfer</p>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
-      <section className="depth-section depth-2">
+      <motion.section 
+        className="depth-section depth-2"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
         <div className="deep-creatures">
           <img
             src="/Colobonema_sericeum_D0992_01_1150.png"
@@ -150,7 +152,7 @@ function App() {
             We specialize in finding what others haven't thought to look for.
           </p>
         </div>
-      </section>
+      </motion.section>
 
       <footer className="footer depth-footer">
         <p>&copy; {new Date().getFullYear()} Sargasso, LLC. All rights reserved.</p>
