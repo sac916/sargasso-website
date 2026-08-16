@@ -61,7 +61,7 @@ function App() {
             Navigating the depths of artificial intelligence to deliver strategic solutions
           </p>
           <div className="contact">
-            <a href="mailto:contact@sargasso.ai" className="contact-btn">Let's Talk Strategy</a>
+            <a href="mailto:contact@sargassoai.com" className="contact-btn">Let's Talk Strategy</a>
           </div>
         </main>
       </motion.div>
@@ -120,7 +120,52 @@ function App() {
         </div>
       </motion.section>
 
-      <motion.section 
+      <motion.section
+        className="depth-section depth-reports"
+        id="reports"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
+        <div className="depth-content">
+          <h2>Site Intelligence Reports</h2>
+          <p className="depth-description">
+            Utility capacity due diligence for land developers in fast-growing
+            Lowcountry corridors. Send a coordinate; within 24 hours you get a
+            structured report: water and sewer capacity with real permitted plant
+            headroom, connection and capacity fees, entitlement climate and board
+            track record, flood and environmental screens, traffic counts, and the
+            capital projects moving nearby — including board-approved work that
+            hasn't reached public GIS yet.
+          </p>
+          <motion.div
+            className="expertise-grid reports-grid"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+          >
+            <motion.div className="expertise-item depth-near" variants={itemVariants}>
+              <h3>Single Site — $1,500</h3>
+              <p>Full report in 24 hours. If it doesn't surface something you'd have paid to know, it's fully refunded.</p>
+            </motion.div>
+            <motion.div className="expertise-item depth-mid" variants={itemVariants}>
+              <h3>3-Pack — $3,500</h3>
+              <p>Three sites, same guarantee. For pipelines, not one-offs.</p>
+            </motion.div>
+            <motion.div className="expertise-item depth-near" variants={itemVariants}>
+              <h3>Corridor Watch — $399/mo</h3>
+              <p>Weekly digest of board actions, fee changes, and capacity signals for your corridor. Always on.</p>
+            </motion.div>
+          </motion.div>
+          <div className="contact reports-contact">
+            <a href="mailto:contact@sargassoai.com?subject=Site%20report%20request" className="contact-btn">Request a Report</a>
+          </div>
+        </div>
+      </motion.section>
+
+      <motion.section
         className="depth-section depth-2"
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}

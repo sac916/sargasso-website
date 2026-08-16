@@ -763,3 +763,26 @@ body {
     left: 12%;
   }
 }
+
+/* ── Site Intelligence Reports section ─────────────────────────── */
+.depth-reports .depth-description {
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.reports-grid {
+  margin-top: 3rem;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.reports-contact {
+  margin-top: 3rem;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .reports-grid {
+    grid-template-columns: 1fr;
+  }
+}
