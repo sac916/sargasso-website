@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <title>Sargasso — Ground Intelligence</title>
+  <!-- A/B/C variant: C (ceiling-led / decisional) -->
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:        #080f18;
+      --deep:       #0b1825;
+      --surface:    #0f2133;
+      --rule:       rgba(255,255,255,0.07);
+      --amber:      #c8a96e;
+      --amber-dim:  rgba(200,169,110,0.12);
+      --amber-mid:  rgba(200,169,110,0.22);
+      --white:      #edf0ed;
+      --muted:      #6b8fa0;
+      --green:      #5aab78;
+      --yellow:     #d9a33a;
+      --red:        #c95050;
+      --sans:  'Inter', 'Helvetica Neue', Arial, sans-serif;
+      --serif: 'DM Serif Display', Georgia, serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--sans);
+      background: var(--ink);
+      color: var(--white);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.6;
+    }
+
+    /* ─── NAV ─────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 3.5rem;
+      background: rgba(8,15,24,0.9);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--rule);
+    }
+    .logo {
+      font-size: 0.72rem; letter-spacing: 0.28em;
+      font-weight: 300; text-transform: uppercase;
+      color: var(--white); text-decoration: none;
+    }
+    .logo em { font-style: normal; color: var(--amber); }
+    .nav-right { display: flex; align-items: center; gap: 2rem; }
+    .nav-link {
+      font-size: 0.68rem; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--muted);
+      text-decoration: none; transition: color .2s;
+    }
+    .nav-link:hover { color: var(--amber); }
+    .nav-btn {
+      font-size: 0.68rem; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--white);
+      border: 1px solid rgba(255,255,255,0.22);
+      padding: 0.5rem 1.3rem; text-decoration: none;
+      transition: border-color .2s, color .2s;
+    }
+    .nav-btn:hover { border-color: var(--amber); color: var(--amber); }
+
+    /* ─── HERO — split layout ─────────────────── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 8rem 3.5rem 6rem;
+      position: relative; overflow: hidden;
+      background: linear-gradient(155deg, #0c2035 0%, #080f18 60%);
+    }
+
+    /* subtle diagonal rule — starts below fixed nav (~80px) so it doesn't bleed into the ceiling */
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 80px; right: 28%; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent 0%, rgba(200,169,110,0.15) 20%, rgba(200,169,110,0.15) 75%, transparent 100%);
+      pointer-events: none;
+    }
+
+    /* ambient glow behind card */
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 10%; right: 2%;
+      width: 42%; height: 70%;
+      background: radial-gradient(ellipse at center, rgba(200,169,110,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      max-width: 1240px; width: 100%;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 6rem;
+      align-items: center;
+      position: relative;
+    }
+
+    .hero-left {}
+
+    .hero-kicker {
+      font-size: 0.67rem; letter-spacing: 0.32em;
+      text-transform: uppercase; color: var(--amber);
+      display: flex; align-items: center; gap: 0.7rem;
+      margin-bottom: 2.2rem;
+    }
+    .hero-kicker::before {
+      content: '';
+      display: inline-block;
+      width: 20px; height: 1px;
+      background: var(--amber); opacity: 0.6;
+    }
+
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.8rem, 5.5vw, 5.2rem);
+      letter-spacing: -0.01em;
+      line-height: 1.07;
+      max-width: 14ch;
+      margin-bottom: 2rem;
+    }
+    .hero h1 strong { font-weight: 400; color: var(--amber); }
+
+    .hero-sub {
+      font-size: 1rem; color: var(--muted);
+      max-width: 46ch; line-height: 1.8;
+      font-weight: 300; margin-bottom: 3rem;
+    }
+
+    .hero-actions { display: flex; gap: 1.2rem; align-items: center; margin-bottom: 3.5rem; }
+    .btn-fill {
+      font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+      background: var(--amber); color: var(--ink);
+      padding: 0.9rem 2.2rem; text-decoration: none;
+      font-weight: 500; transition: opacity .2s; display: inline-block;
+    }
+    .btn-fill:hover { opacity: 0.85; }
+    .btn-ghost {
+      font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--muted); text-decoration: none; transition: color .2s;
+    }
+    .btn-ghost:hover { color: var(--white); }
+
+    .hero-proof-strip {
+      display: flex; gap: 3rem; flex-wrap: wrap;
+      padding-top: 2.5rem;
+      border-top: 1px solid var(--rule);
+    }
+    .stat-n {
+      font-size: 2rem; font-weight: 300;
+      color: var(--amber); line-height: 1; margin-bottom: 0.25rem;
+    }
+    .stat-l {
+      font-size: 0.67rem; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--muted);
+    }
+
+    /* ─── CEILING CARD ────────────────────────── */
+    .ceiling-card {
+      background: var(--surface);
+      border: 1px solid rgba(200,169,110,0.25);
+      position: relative; overflow: hidden; z-index: 1;
+    }
+    .ceiling-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--amber), transparent);
+    }
+
+    .cc-header {
+      padding: 1.4rem 1.8rem 1rem;
+      border-bottom: 1px solid var(--rule);
+      display: flex; justify-content: space-between; align-items: flex-start;
+    }
+    .cc-label {
+      font-size: 0.65rem; letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--amber);
+      display: block; margin-bottom: 0.2rem;
+    }
+    .cc-addr {
+      font-size: 0.78rem; color: var(--white); font-weight: 400;
+    }
+    .cc-coord {
+      font-size: 0.67rem; color: var(--muted);
+      font-family: monospace; letter-spacing: 0.05em;
+      text-align: right;
+    }
+
+    .cc-body { padding: 0 1.8rem 0.5rem; }
+
+    .cc-metric {
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--rule);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      grid-template-rows: auto auto;
+      gap: 0.15rem 0;
+    }
+    .cc-metric:last-child { border-bottom: none; }
+    .cc-key {
+      font-size: 0.72rem; color: var(--muted);
+      letter-spacing: 0.05em; grid-column: 1; grid-row: 1;
+    }
+    .cc-val {
+      font-size: 0.9rem; color: var(--white); font-weight: 400;
+      grid-column: 1; grid-row: 2;
+    }
+    .cc-badge {
+      grid-column: 2; grid-row: 1 / 3;
+      align-self: center;
+      font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 0.25rem 0.6rem;
+      border: 1px solid;
+    }
+    .cc-badge.green  { color: var(--green);  border-color: rgba(90,171,120,0.35); }
+    .cc-badge.yellow { color: var(--yellow); border-color: rgba(217,163,58,0.35); }
+    .cc-badge.red    { color: var(--red);    border-color: rgba(201,80,80,0.35); }
+
+    .cc-note-row {
+      font-size: 0.7rem; color: var(--muted);
+      grid-column: 1; grid-row: 3;
+      padding-top: 0.1rem;
+    }
+
+    .cc-footer {
+      padding: 1rem 1.8rem 1.4rem;
+      border-top: 1px solid var(--rule);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .cc-footer-note {
+      font-size: 0.65rem; color: var(--muted); letter-spacing: 0.05em;
+    }
+    .cc-footer-ts {
+      font-size: 0.65rem; color: rgba(200,169,110,0.5); font-family: monospace;
+    }
+
+    /* ─── SHARED ──────────────────────────────── */
+    .section { padding: 8rem 3.5rem; }
+    .inner { max-width: 1040px; margin: 0 auto; }
+    .tag {
+      font-size: 0.67rem; letter-spacing: 0.28em;
+      text-transform: uppercase; color: var(--amber);
+      display: block; margin-bottom: 1.8rem;
+    }
+    .h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.9rem, 3.5vw, 3rem);
+      letter-spacing: -0.01em;
+      line-height: 1.1; margin-bottom: 1.5rem;
+    }
+    .lead {
+      font-size: 1rem; color: var(--muted);
+      max-width: 50ch; line-height: 1.8; font-weight: 300;
+    }
+
+    /* ─── WHAT YOU LEARN ─────────────────────── */
+    .learn { background: var(--deep); }
+
+    .learn-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: start;
+      margin-top: 5rem;
+    }
+
+    .learn-callout {
+      position: sticky; top: 8rem;
+    }
+    .learn-callout-quote {
+      font-family: var(--serif);
+      font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+      line-height: 1.2;
+      color: var(--white);
+      margin-bottom: 2rem;
+    }
+    .learn-callout-quote em {
+      font-style: italic; color: var(--amber);
+    }
+    .learn-callout p {
+      font-size: 0.92rem; color: var(--muted); line-height: 1.8; font-weight: 300;
+    }
+
+    .learn-list { display: flex; flex-direction: column; gap: 0; }
+    .learn-item {
+      padding: 2rem 0;
+      border-top: 1px solid var(--rule);
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 1.2rem;
+      align-items: start;
+    }
+    .learn-item:last-child { border-bottom: 1px solid var(--rule); }
+    .learn-num {
+      font-size: 0.65rem; letter-spacing: 0.15em; color: var(--amber);
+      padding-top: 0.25rem; font-weight: 400;
+    }
+    .learn-item h3 {
+      font-size: 0.94rem; font-weight: 500;
+      margin-bottom: 0.5rem; line-height: 1.4;
+    }
+    .learn-item p {
+      font-size: 0.88rem; color: var(--muted); line-height: 1.75;
+    }
+
+    /* ─── HOW ─────────────────────────────────── */
+    .how { background: var(--ink); }
+    .how-list { margin-top: 5rem; }
+    .how-row {
+      display: grid; grid-template-columns: 80px 1fr 1fr;
+      gap: 3rem; align-items: start;
+      padding: 3.5rem 0; border-top: 1px solid var(--rule);
+    }
+    .how-row:last-child { border-bottom: 1px solid var(--rule); }
+    .how-n {
+      font-size: 0.67rem; letter-spacing: 0.22em;
+      color: var(--muted); padding-top: 0.3rem;
+    }
+    .how-row h3 {
+      font-family: var(--serif); font-size: 1.3rem;
+      line-height: 1.2; margin-bottom: 0.9rem;
+    }
+    .how-row p {
+      font-size: 0.94rem; color: var(--muted); line-height: 1.8;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--rule);
+      padding: 1.6rem 1.8rem;
+    }
+    .card-tag {
+      font-size: 0.67rem; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--amber);
+      margin-bottom: 1rem; display: block;
+    }
+    .layers { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+    .layers li {
+      display: flex; align-items: center; gap: 0.65rem;
+      font-size: 0.83rem; color: var(--muted);
+    }
+    .layers li::before {
+      content: ''; width: 5px; height: 5px; border-radius: 50%;
+      background: var(--amber); opacity: 0.7; flex-shrink: 0;
+    }
+    .matrix { display: flex; flex-direction: column; gap: 0.35rem; }
+    .mrow { display: flex; align-items: center; gap: 0.9rem; padding: 0.55rem 0.6rem; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .g { background: var(--green); }
+    .y { background: var(--yellow); }
+    .r { background: var(--red); }
+    .ml { font-size: 0.8rem; color: var(--muted); flex: 1; }
+    .mv { font-size: 0.76rem; color: var(--white); }
+    .compare { display: flex; flex-direction: column; gap: 0; }
+    .compare-row { padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+    .compare-row:last-child { border-bottom: none; }
+    .compare-label { font-size: 0.67rem; letter-spacing: 0.13em; text-transform: uppercase; margin-bottom: 0.3rem; }
+    .compare-val { font-size: 1.1rem; font-weight: 300; }
+    .compare-sub { font-size: 0.72rem; color: var(--muted); margin-top: 0.2rem; }
+    .compare-row.highlight .compare-label { color: var(--amber); }
+    .compare-row.highlight .compare-val { color: var(--amber); }
+    .pull {
+      border-left: 2px solid var(--amber);
+      padding: 1.2rem 1.5rem;
+      background: rgba(200,169,110,0.06);
+    }
+    .pull p { font-size: 0.94rem; line-height: 1.75; font-style: italic; }
+    .pull cite { display: block; font-size: 0.65rem; letter-spacing: 0.1em; color: var(--muted); margin-top: 0.7rem; font-style: normal; }
+
+    /* ─── VS SECTION ──────────────────────────── */
+    .vs { background: var(--deep); }
+    .vs-headline {
+      font-family: var(--serif);
+      font-size: clamp(1.9rem, 3vw, 2.8rem);
+      line-height: 1.15;
+      max-width: 22ch;
+      margin-bottom: 1rem;
+    }
+    .vs-sub {
+      font-size: 0.94rem; color: var(--muted);
+      max-width: 44ch; line-height: 1.75; font-weight: 300;
+      margin-bottom: 4rem;
+    }
+    .vs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border: 1px solid var(--rule);
+    }
+    .vs-col {
+      padding: 2.5rem 2rem;
+      border-right: 1px solid var(--rule);
+      position: relative;
+    }
+    .vs-col:last-child { border-right: none; }
+    .vs-col.highlight {
+      background: var(--amber-dim);
+      border-color: rgba(200,169,110,0.2);
+    }
+    .vs-col.highlight::before {
+      content: 'SARGASSO';
+      position: absolute; top: -1px; left: -1px; right: -1px;
+      text-align: center;
+      font-size: 0.6rem; letter-spacing: 0.25em;
+      background: var(--amber); color: var(--ink);
+      padding: 0.35rem 0;
+      font-weight: 500;
+    }
+    .vs-who {
+      font-size: 0.67rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 1rem; display: block;
+    }
+    .vs-col.highlight .vs-who { color: var(--amber); }
+    .vs-col h3 {
+      font-size: 0.94rem; font-weight: 500;
+      margin-bottom: 1rem; line-height: 1.35;
+    }
+    .vs-facts { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+    .vs-facts li {
+      font-size: 0.82rem; color: var(--muted); line-height: 1.5;
+      display: flex; gap: 0.6rem; align-items: flex-start;
+    }
+    .vs-facts li::before {
+      content: '';
+      width: 5px; height: 5px; border-radius: 50%;
+      flex-shrink: 0; margin-top: 0.45rem;
+    }
+    .vs-col:not(.highlight) .vs-facts li::before { background: rgba(107,143,160,0.5); }
+    .vs-col.highlight .vs-facts li::before { background: var(--amber); }
+    .vs-col.highlight .vs-facts li { color: var(--white); }
+
+    /* ─── NUMBERS ─────────────────────────────── */
+    .numbers { background: var(--ink); }
+    .num-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      border: 1px solid var(--rule); margin-top: 4rem;
+    }
+    .num-cell {
+      padding: 3rem 2rem; border-right: 1px solid var(--rule);
+    }
+    .num-cell:last-child { border-right: none; }
+    .num-big { font-size: 3rem; font-weight: 300; color: var(--amber); line-height: 1; margin-bottom: 0.7rem; }
+    .num-lab { font-size: 0.75rem; color: var(--muted); line-height: 1.5; }
+
+    /* ─── CTA ─────────────────────────────────── */
+    .cta-section {
+      background: var(--surface);
+      border-top: 1px solid var(--rule);
+      padding: 10rem 3.5rem;
+      text-align: center;
+    }
+    .cta-section .h2 { max-width: none; margin: 0 auto 1.5rem; }
+    .cta-section .lead { margin: 0 auto 3rem; }
+    .cta-note {
+      margin-top: 1.5rem; font-size: 0.72rem;
+      color: var(--muted); letter-spacing: 0.06em;
+    }
+
+    /* ─── FOOTER ──────────────────────────────── */
+    footer {
+      background: var(--ink); border-top: 1px solid var(--rule);
+      padding: 2.5rem 3.5rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    footer span { font-size: 0.68rem; letter-spacing: 0.15em; color: var(--muted); }
+
+    @media (max-width: 1100px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 4rem; }
+      .ceiling-card { max-width: 440px; }
+      .hero::after { display: none; }
+    }
+    @media (max-width: 900px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .section { padding: 6rem 1.5rem; }
+      .hero { padding: 7rem 1.5rem 5rem; }
+      .learn-layout { grid-template-columns: 1fr; gap: 3rem; }
+      .learn-callout { position: static; }
+      .how-row { grid-template-columns: 1fr; gap: 1.5rem; }
+      .how-n { display: none; }
+      .vs-grid { grid-template-columns: 1fr; }
+      .vs-col { border-right: none; border-bottom: 1px solid var(--rule); }
+      .vs-col:last-child { border-bottom: none; }
+      .num-grid { grid-template-columns: 1fr 1fr; }
+      .num-cell:nth-child(2) { border-right: none; }
+      .num-cell:nth-child(3) { border-top: 1px solid var(--rule); }
+      footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="logo">SARGASSO <em>·</em> GROUND</a>
+  <div class="nav-right">
+    <a href="#how" class="nav-link">How it works</a>
+    <a href="#request" class="nav-btn">Evaluate a Site</a>
+  </div>
+</nav>
+
+<!-- HERO — split layout: headline left, ceiling card right -->
+<section class="hero">
+  <div class="hero-inner">
+
+    <div class="hero-left">
+      <div class="hero-kicker">Site Intelligence · Beaufort County</div>
+      <h1>Every site has a ceiling.<br>We show you <strong>yours.</strong></h1>
+      <p class="hero-sub">
+        Before your engineering budget starts running, know exactly what the site can carry —
+        utility capacity, connection fees, entitlement climate, flood exposure.
+        In 24 hours. Not 30 days.
+      </p>
+      <div class="hero-actions">
+        <a href="#request" class="btn-fill">Evaluate a Site</a>
+        <a href="#how" class="btn-ghost">How it works ↓</a>
+      </div>
+      <div class="hero-proof-strip">
+        <div>
+          <div class="stat-n">$1,500</div>
+          <div class="stat-l">Per site briefing</div>
+        </div>
+        <div>
+          <div class="stat-n">24 hrs</div>
+          <div class="stat-l">Delivery</div>
+        </div>
+        <div>
+          <div class="stat-n">11</div>
+          <div class="stat-l">Intelligence layers</div>
+        </div>
+        <div>
+          <div class="stat-n">$15k</div>
+          <div class="stat-l">Saved on a dead deal</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MOCK SITE CEILING CARD -->
+    <div class="ceiling-card">
+      <div class="cc-header">
+        <div>
+          <span class="cc-label">Site Ceiling Analysis</span>
+          <span class="cc-addr">Parcel 2206-0-0143-000</span>
+        </div>
+        <span class="cc-coord">32.4316° N<br>80.6698° W</span>
+      </div>
+
+      <div class="cc-body">
+        <div class="cc-metric">
+          <span class="cc-key">Permitted headroom</span>
+          <span class="cc-val">8.1 MGD system capacity</span>
+          <span class="cc-badge yellow">Watch</span>
+          <span class="cc-note-row" style="grid-column:1;grid-row:3;font-size:.7rem;color:var(--muted);padding-top:.1rem">Tightest serving plant 93% utilized — EPA permit data</span>
+        </div>
+        <div class="cc-metric">
+          <span class="cc-key">Flood zone</span>
+          <span class="cc-val">Zone AE — Special Flood Hazard</span>
+          <span class="cc-badge red">Flag</span>
+          <span class="cc-note-row" style="grid-column:1;grid-row:3;font-size:.7rem;color:var(--muted);padding-top:.1rem">NFIP flood insurance required · BFE check before grading</span>
+        </div>
+        <div class="cc-metric">
+          <span class="cc-key">Water infrastructure</span>
+          <span class="cc-val">CIP project 850 ft out</span>
+          <span class="cc-badge yellow">Watch</span>
+          <span class="cc-note-row" style="grid-column:1;grid-row:3;font-size:.7rem;color:var(--muted);padding-top:.1rem">Water Main Extension Q3 2026 — confirm BJWSA timeline</span>
+        </div>
+        <div class="cc-metric">
+          <span class="cc-key">Impact fees</span>
+          <span class="cc-val">$15,023/ERU combined</span>
+          <span class="cc-badge red">Flag</span>
+          <span class="cc-note-row" style="grid-column:1;grid-row:3;font-size:.7rem;color:var(--muted);padding-top:.1rem">Water $3,440 + sewer $11,583 · increased 2026-07-01 · no moratorium active</span>
+        </div>
+        <div class="cc-metric">
+          <span class="cc-key">Entitlement climate</span>
+          <span class="cc-val">Opposition noted — adjacent parcel</span>
+          <span class="cc-badge yellow">Watch</span>
+          <span class="cc-note-row" style="grid-column:1;grid-row:3;font-size:.7rem;color:var(--muted);padding-top:.1rem">Planning board vote Jan 2026 · conditions attached</span>
+        </div>
+        <div class="cc-metric">
+          <span class="cc-key">EPA / Regulatory</span>
+          <span class="cc-val">BJWSA — zero violations (3yr)</span>
+          <span class="cc-badge green">Clear</span>
+        </div>
+      </div>
+
+      <div class="cc-footer">
+        <span class="cc-footer-note">Example briefing output · full PDF in 24 hrs</span>
+        <span class="cc-footer-ts">verified 2026-08-16</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- WHAT YOU LEARN — 2-col layout with sticky callout -->
+<section class="section learn">
+  <div class="inner">
+    <span class="tag">What you learn</span>
+    <div class="learn-layout">
+
+      <div class="learn-callout">
+        <p class="learn-callout-quote">The question isn't whether the site has problems.<br>It's whether those problems <em>kill your deal</em> — and when you find out.</p>
+        <p>
+          Every parcel comes with constraints. Flood zones, infrastructure gaps, entitlement friction.
+          The briefing doesn't just flag them — it tells you whether they're dealbreakers,
+          watchlist items, or noise. In 24 hours. Before your deposit goes hard.
+        </p>
+      </div>
+
+      <div class="learn-list">
+        <div class="learn-item">
+          <span class="learn-num">01</span>
+          <div>
+            <h3>What you can build — and what you can't</h3>
+            <p>Zoning designation, parcel entitlement history, and the planning board's actual track record — what they've conditioned, opposed, and voted on, with approval rates from the hearing record, not just what's on the parcel map.</p>
+          </div>
+        </div>
+        <div class="learn-item">
+          <span class="learn-num">02</span>
+          <div>
+            <h3>Whether infrastructure can support it</h3>
+            <p>Real permitted plant headroom from EPA operating permits, active CIP projects, impact fees per ERU — current as of the latest schedule, not last year's. The treatment plant already at 93% utilization. We track what the portals haven't caught up to yet.</p>
+          </div>
+        </div>
+        <div class="learn-item">
+          <span class="learn-num">03</span>
+          <div>
+            <h3>What the flood zone means for your pro forma</h3>
+            <p>Zone classification, SFHA flag, Base Flood Elevation. Not "here's the data" — "here's what it means: budget for NFIP flood insurance and confirm BFE before you commit to finished floor grades."</p>
+          </div>
+        </div>
+        <div class="learn-item">
+          <span class="learn-num">04</span>
+          <div>
+            <h3>What's in motion around the site</h3>
+            <p>Planning applications, development pipeline activity, utility board decisions that haven't appeared in any public GIS feed yet. The site's trajectory — not just its current state.</p>
+          </div>
+        </div>
+        <div class="learn-item">
+          <span class="learn-num">05</span>
+          <div>
+            <h3>Whether the deal is worth an engineering engagement</h3>
+            <p>The briefing is the step before you hire the civil engineer. At $1,500 in 24 hours, you know whether a site is worth the diligence spend that follows. You only deploy that budget on the deals you're going to close.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section how" id="how">
+  <div class="inner">
+    <span class="tag">How it works</span>
+    <h2 class="h2">One coordinate in. The full ceiling out.</h2>
+
+    <div class="how-list">
+
+      <!-- 01 -->
+      <div class="how-row">
+        <span class="how-n">01</span>
+        <div>
+          <h3>You give us a parcel.</h3>
+          <p>An address, a PIN, or a coordinate. That's the only input. No forms, no intake call, no consultant briefing.</p>
+        </div>
+        <div class="card">
+          <span class="card-tag">Input</span>
+          <div style="font-family:monospace;font-size:.85rem;color:#5aab78">
+            GET /v1/resolve<br>
+            <span style="color:var(--muted)">  lat: 32.4316<br>  lon: -80.6698</span>
+          </div>
+          <p style="font-size:.72rem;color:var(--muted);margin-top:.9rem">Beaufort County, SC — any parcel, any coordinate</p>
+        </div>
+      </div>
+
+      <!-- 02 -->
+      <div class="how-row">
+        <span class="how-n">02</span>
+        <div>
+          <h3>We resolve eleven layers.</h3>
+          <p>Water utility and EPA compliance, permitted plant headroom, active CIP projects, flood zone, environmental screen, impact fees, entitlement climate and board track record, development pipeline, traffic counts, broadband, electric and opportunity zone — assembled from sources no single portal exposes.</p>
+        </div>
+        <div class="card">
+          <span class="card-tag">Intelligence layers</span>
+          <ul class="layers">
+            <li>Water utility identity + EPA compliance</li>
+            <li>Active infrastructure projects within 1mi</li>
+            <li>Flood zone + SFHA flag (FEMA NFHL)</li>
+            <li>Impact fees — water & sewer per ERU</li>
+            <li>Permitted plant headroom (EPA operating permits)</li>
+            <li>Planning applications — votes, opposition, conditions</li>
+            <li>Development pipeline + activity</li>
+            <li>Environmental screen incl. wetlands (EPA/USFWS)</li><li>Traffic counts (SCDOT AADT)</li><li>Broadband availability + fiber flag</li>
+            <li>Electric utility + Opportunity Zone</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 03 -->
+      <div class="how-row">
+        <span class="how-n">03</span>
+        <div>
+          <h3>You get the briefing.</h3>
+          <p>A full PDF briefing in 24 hours. Page one is a red/yellow/green risk matrix — readable in 90 seconds. The rest translates every layer into business consequences. Not raw data. The read.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:1rem">
+          <div class="card">
+            <span class="card-tag">Page 1 — Risk matrix</span>
+            <div class="matrix">
+              <div class="mrow"><div class="dot g"></div><span class="ml">Water — Regulatory</span><span class="mv">No violations (3yr)</span></div>
+              <div class="mrow"><div class="dot y"></div><span class="ml">Water — Capacity</span><span class="mv">CIP project 850ft</span></div>
+              <div class="mrow"><div class="dot r"></div><span class="ml">Flood</span><span class="mv">Zone AE — SFHA</span></div>
+              <div class="mrow"><div class="dot r"></div><span class="ml">Impact Fees</span><span class="mv">$15k/ERU combined</span></div>
+              <div class="mrow"><div class="dot y"></div><span class="ml">Entitlement Climate</span><span class="mv">Opposition noted</span></div>
+            </div>
+          </div>
+          <div class="pull">
+            <p>"A Water Main Extension project is under construction 850 feet from this coordinate. Estimated completion: Q3 2026. Confirm the lift station timeline with BJWSA before permit submission."</p>
+            <cite>Example briefing language — Water Intelligence layer</cite>
+          </div>
+        </div>
+      </div>
+
+      <!-- 04 -->
+      <div class="how-row">
+        <span class="how-n">04</span>
+        <div>
+          <h3>You know your ceiling before you commit.</h3>
+          <p>This is the step before you hire the engineer — not a replacement. At $1,500 in 24 hours, you know whether a site is worth the diligence spend that follows. You only deploy that budget on the deals you're going to close.</p>
+        </div>
+        <div class="card">
+          <span class="card-tag">Cost comparison</span>
+          <div class="compare">
+            <div class="compare-row">
+              <div class="compare-label" style="color:var(--muted)">Standard utility feasibility study</div>
+              <div class="compare-val">$3,000 – $7,000</div>
+              <div class="compare-sub">4–8 weeks · PE-stamped opinion</div>
+            </div>
+            <div class="compare-row highlight">
+              <div class="compare-label">Sargasso Ground briefing</div>
+              <div class="compare-val">$1,500</div>
+              <div class="compare-sub">24 hours · triage before you commit</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- VS SECTION — competitive contrast (new in Variant C) -->
+<section class="section vs">
+  <div class="inner">
+    <span class="tag">How we differ</span>
+    <h2 class="vs-headline">We don't out-layer them. We out-answer them.</h2>
+    <p class="vs-sub">Every other data product gives you a snapshot of what a parcel is today. We give you the read — translated into business consequences, not more layers to interpret yourself.</p>
+    <div class="vs-grid">
+      <div class="vs-col">
+        <span class="vs-who">Latapult / GIS portals</span>
+        <h3>250+ map layers.<br>No verdict.</h3>
+        <ul class="vs-facts">
+          <li>Presents filtered layers — you interpret findings yourself</li>
+          <li>No EPA regulatory compliance data</li>
+          <li>No utility capacity or active CIP projects</li>
+          <li>No entitlement / planning-application signal</li>
+          <li>No impact fees per ERU</li>
+        </ul>
+      </div>
+      <div class="vs-col highlight">
+        <span class="vs-who">Sargasso Ground</span>
+        <h3>11 layers.<br>One clear read.</h3>
+        <ul class="vs-facts">
+          <li>Every layer translated into a business consequence</li>
+          <li>EPA SDWIS regulatory compliance — included</li>
+          <li>Utility capacity + active CIP projects — included</li>
+          <li>Planning board votes 4–12 weeks before GIS feeds — included</li>
+          <li>Impact fees per ERU — included</li>
+        </ul>
+      </div>
+      <div class="vs-col">
+        <span class="vs-who">Civil engineer</span>
+        <h3>PE-stamped opinion.<br>30 days later.</h3>
+        <ul class="vs-facts">
+          <li>Full engineering engagement: $3k–$7k, 4–8 weeks</li>
+          <li>You find out a site is dead after you've already committed</li>
+          <li>Right tool for sites you've already cleared for commitment</li>
+          <li>Not the triage step — the confirmation step</li>
+          <li>We protect your engineering budget for the deals worth closing</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NUMBERS -->
+<section class="section numbers">
+  <div class="inner">
+    <span class="tag">Coverage</span>
+    <h2 class="h2">Built for the Lowcountry.</h2>
+    <div class="num-grid">
+      <div class="num-cell">
+        <div class="num-big">4</div>
+        <div class="num-lab">Counties covered — full Lowcountry ring</div>
+      </div>
+      <div class="num-cell">
+        <div class="num-big">11</div>
+        <div class="num-lab">Intelligence layers per response</div>
+      </div>
+      <div class="num-cell">
+        <div class="num-big">PDF</div>
+        <div class="num-lab">PDF briefing — ready to share with your deal team</div>
+      </div>
+      <div class="num-cell">
+        <div class="num-big">$15k</div>
+        <div class="num-lab">Average cost to find a dead deal the old way</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="request">
+  <div class="inner">
+    <span class="tag">Get started</span>
+    <h2 class="h2">Know your ceiling before you commit.</h2>
+    <p class="lead">
+      One coordinate. Eleven intelligence layers. The full picture in 24 hours —
+      density ceiling, flood exposure, infrastructure limits, entitlement climate.
+      Know what you can build before your engineering budget starts running.
+    </p>
+    <a href="mailto:contact@sargassoai.com?subject=Site Evaluation Request" class="btn-fill">Evaluate a Site — $1,500</a>
+    <p class="cta-note">No subscription · No intake call · Delivered in 24 hours · Fully refunded if it doesn't surface something you'd have paid to know</p>
+  </div>
+</section>
+
+<footer>
+  <span>SARGASSO · GROUND INTELLIGENCE · BEAUFORT, SC</span>
+  <span>A product of Sargasso, LLC · sargassoai.com</span>
+</footer>
+
+</body>
+</html>
