@@ -61,7 +61,7 @@ function App() {
             Navigating the depths of artificial intelligence to deliver strategic solutions
           </p>
           <div className="contact">
-            <a href="mailto:contact@sargasso.ai" className="contact-btn">Let's Talk Strategy</a>
+            <a href="mailto:contact@sargassoai.com" className="contact-btn">Let's Talk Strategy</a>
           </div>
         </main>
       </motion.div>
