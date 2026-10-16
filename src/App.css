@@ -2159,9 +2159,40 @@ body {
     bottom: 1rem;
     align-items: center;
   }
-  
+
   .bar-buttons {
     width: 100%;
     justify-content: center;
+  }
+
+  /* Deep-redesign sections forced min-height:100vh + 8rem padding regardless
+     of content length, which creates huge dead-space gaps on short mobile
+     viewports. Let sections hug their content instead. */
+  .hero-section-deep {
+    min-height: auto;
+    padding: 2rem 1.25rem 2.5rem;
+  }
+
+  .hero-content-deep {
+    /* Header is position:absolute over the hero, and stacks to 2 rows on
+       mobile (logo, then wrapped nav) — needs real clearance or the eyebrow
+       badge collides with the nav links. */
+    margin-top: 7.5rem;
+    gap: 1.5rem;
+    padding: 0.5rem;
+  }
+
+  .hero-title-deep {
+    font-size: clamp(2.2rem, 10vw, 3.2rem);
+    line-height: 1.08;
+  }
+
+  .depth-section-deep {
+    min-height: auto;
+    padding: 4rem 1.25rem;
+  }
+
+  .section-index-deep {
+    margin-bottom: 1.25rem;
   }
 }
