@@ -2196,3 +2196,36 @@ body {
     margin-bottom: 1.25rem;
   }
 }
+
+/* Landscape phones (e.g. a rotated iPhone, ~844x390) are wider than the
+   600px portrait breakpoint above, so they were still getting full desktop
+   min-height:100vh + 8rem section padding against a much shorter viewport —
+   same dead-space problem, different axis. Target short viewport height
+   directly instead of width. */
+@media (max-height: 520px) and (orientation: landscape) {
+  .hero-section-deep {
+    min-height: auto;
+    padding: 1.5rem 2rem 2rem;
+  }
+
+  .hero-content-deep {
+    /* Header stays single-row in landscape (not column-stacked like
+       portrait), so it needs less clearance than the 7.5rem portrait value. */
+    margin-top: 6rem;
+    gap: 1rem;
+  }
+
+  .hero-title-deep {
+    font-size: clamp(1.8rem, 6vw, 2.8rem);
+    line-height: 1.1;
+  }
+
+  .hero-subtitle-deep {
+    font-size: 1rem;
+  }
+
+  .depth-section-deep {
+    min-height: auto;
+    padding: 2.5rem 2rem;
+  }
+}
