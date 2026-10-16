@@ -2116,6 +2116,23 @@ body {
   }
 }
 
+/* Covers tablets, large phones, and anything between the 992px tablet
+   breakpoint and the 600px narrow-phone one below — previously nothing
+   touched min-height:100vh / 8rem padding in this range, so portrait
+   viewports here (820px wide, e.g. an iPad) still got the full desktop
+   forced-full-screen treatment against much shorter content. */
+@media (max-width: 900px) {
+  .hero-section-deep {
+    min-height: auto;
+    padding: 3rem 2rem;
+  }
+
+  .depth-section-deep {
+    min-height: auto;
+    padding: 4.5rem 2rem;
+  }
+}
+
 @media (max-width: 600px) {
   .header-container, .header-container-deep {
     flex-direction: column;
