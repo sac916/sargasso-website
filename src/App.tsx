@@ -99,7 +99,7 @@ function App() {
             transition={{ duration: 0.8 }}
           >
             <div className="depth-container-deep">
-              <span className="section-index-deep">01 / How We Work (Descent)</span>
+              <span className="section-index-deep">01 / How We Work</span>
               <h2 className="manifesto-heading-deep">
                 A website or a chatbot bolted onto a broken process is still a broken process.
               </h2>
@@ -148,7 +148,7 @@ function App() {
             </div>
 
             <div className="depth-container-deep">
-              <span className="section-index-deep">02 / The Architecture (Midwater)</span>
+              <span className="section-index-deep">02 / The Architecture</span>
               <h2 className="section-title-deep">Engineered for Resilience</h2>
               <p className="section-subtitle-deep">
                 We do not sell self-service templates or software tools. We deliver custom websites, integrations, and automation built for how your business actually runs.
@@ -214,7 +214,7 @@ function App() {
             </div>
 
             <div className="depth-container-deep">
-              <span className="section-index-deep">03 / Proven in the Depths (Abyssal Zone)</span>
+              <span className="section-index-deep">03 / Proven in the Depths</span>
               <h2 className="section-title-deep">Case Studies & Deployments</h2>
               <p className="section-subtitle-deep">
                 Real work, across different industries — not one template reused twice.
